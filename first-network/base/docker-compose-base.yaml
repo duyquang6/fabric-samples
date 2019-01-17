@@ -7,15 +7,15 @@ version: '2'
 
 services:
 
-  orderer.example.com:
-    container_name: orderer.example.com
+  orderer.bkpfiev.com:
+    container_name: orderer.bkpfiev.com
     image: hyperledger/fabric-orderer:$IMAGE_TAG
     environment:
       - FABRIC_LOGGING_SPEC=INFO
       - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
       - ORDERER_GENERAL_GENESISMETHOD=file
       - ORDERER_GENERAL_GENESISFILE=/var/hyperledger/orderer/orderer.genesis.block
-      - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
+      - ORDERER_GENERAL_LOCALMSPID=BkpfievOrdererMSP
       - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
       # enabled TLS
       - ORDERER_GENERAL_TLS_ENABLED=true
@@ -28,89 +28,175 @@ services:
     command: orderer
     volumes:
     - ../channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
-    - ../crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/msp:/var/hyperledger/orderer/msp
-    - ../crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/tls/:/var/hyperledger/orderer/tls
-    - orderer.example.com:/var/hyperledger/production/orderer
+    - ../crypto-config/ordererOrganizations/bkpfiev.com/orderers/orderer.bkpfiev.com/msp:/var/hyperledger/orderer/msp
+    - ../crypto-config/ordererOrganizations/bkpfiev.com/orderers/orderer.bkpfiev.com/tls/:/var/hyperledger/orderer/tls
+    - orderer.bkpfiev.com:/var/hyperledger/production/orderer
     ports:
       - 7050:7050
 
-  peer0.org1.example.com:
-    container_name: peer0.org1.example.com
+  peer0.exporterorg.bkpfiev.com:
+    container_name: peer0.exporterorg.bkpfiev.com
     extends:
       file: peer-base.yaml
       service: peer-base
     environment:
-      - CORE_PEER_ID=peer0.org1.example.com
-      - CORE_PEER_ADDRESS=peer0.org1.example.com:7051
-      - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.org1.example.com:7051
-      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org1.example.com:7051
-      - CORE_PEER_LOCALMSPID=Org1MSP
+      - CORE_PEER_ID=peer0.exporterorg.bkpfiev.com
+      - CORE_PEER_ADDRESS=peer0.exporterorg.bkpfiev.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.exporterorg.bkpfiev.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.exporterorg.bkpfiev.com:7051
+      - CORE_PEER_LOCALMSPID=ExporterOrgMSP
     volumes:
         - /var/run/:/host/var/run/
-        - ../crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/msp:/etc/hyperledger/fabric/msp
-        - ../crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls:/etc/hyperledger/fabric/tls
-        - peer0.org1.example.com:/var/hyperledger/production
+        - ../crypto-config/peerOrganizations/exporterorg.bkpfiev.com/peers/peer0.exporterorg.bkpfiev.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/exporterorg.bkpfiev.com/peers/peer0.exporterorg.bkpfiev.com/tls:/etc/hyperledger/fabric/tls
+        - peer0.exporterorg.bkpfiev.com:/var/hyperledger/production
     ports:
       - 7051:7051
       - 7053:7053
+      - 7055:6060
 
-  peer1.org1.example.com:
-    container_name: peer1.org1.example.com
+  # peer1.exporterorg.bkpfiev.com:
+  #   container_name: peer1.exporterorg.bkpfiev.com
+  #   extends:
+  #     file: peer-base.yaml
+  #     service: peer-base
+  #   environment:
+  #     - CORE_PEER_ID=peer1.exporterorg.bkpfiev.com
+  #     - CORE_PEER_ADDRESS=peer1.exporterorg.bkpfiev.com:7051
+  #     - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.exporterorg.bkpfiev.com:7051
+  #     - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.exporterorg.bkpfiev.com:7051
+  #     - CORE_PEER_LOCALMSPID=Org1MSP
+  #   volumes:
+  #       - /var/run/:/host/var/run/
+  #       - ../crypto-config/peerOrganizations/exporterorg.bkpfiev.com/peers/peer1.exporterorg.bkpfiev.com/msp:/etc/hyperledger/fabric/msp
+  #       - ../crypto-config/peerOrganizations/exporterorg.bkpfiev.com/peers/peer1.exporterorg.bkpfiev.com/tls:/etc/hyperledger/fabric/tls
+  #       - peer1.exporterorg.bkpfiev.com:/var/hyperledger/production
+
+  #   ports:
+  #     - 8051:7051
+  #     - 8053:7053
+
+  peer0.importerorg.bkpfiev.com:
+    container_name: peer0.importerorg.bkpfiev.com
     extends:
       file: peer-base.yaml
       service: peer-base
     environment:
-      - CORE_PEER_ID=peer1.org1.example.com
-      - CORE_PEER_ADDRESS=peer1.org1.example.com:7051
-      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.org1.example.com:7051
-      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.org1.example.com:7051
-      - CORE_PEER_LOCALMSPID=Org1MSP
+      - CORE_PEER_ID=peer0.importerorg.bkpfiev.com
+      - CORE_PEER_ADDRESS=peer0.importerorg.bkpfiev.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.importerorg.bkpfiev.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.importerorg.bkpfiev.com:7051
+      - CORE_PEER_LOCALMSPID=ImporterOrgMSP
     volumes:
         - /var/run/:/host/var/run/
-        - ../crypto-config/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/msp:/etc/hyperledger/fabric/msp
-        - ../crypto-config/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/tls:/etc/hyperledger/fabric/tls
-        - peer1.org1.example.com:/var/hyperledger/production
-
+        - ../crypto-config/peerOrganizations/importerorg.bkpfiev.com/peers/peer0.importerorg.bkpfiev.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/importerorg.bkpfiev.com/peers/peer0.importerorg.bkpfiev.com/tls:/etc/hyperledger/fabric/tls
+        - peer0.importerorg.bkpfiev.com:/var/hyperledger/production
     ports:
       - 8051:7051
       - 8053:7053
+      - 8055:6060
 
-  peer0.org2.example.com:
-    container_name: peer0.org2.example.com
+  # peer1.org2.example.com:
+  #   container_name: peer1.org2.example.com
+  #   extends:
+  #     file: peer-base.yaml
+  #     service: peer-base
+  #   environment:
+  #     - CORE_PEER_ID=peer1.org2.example.com
+  #     - CORE_PEER_ADDRESS=peer1.org2.example.com:7051
+  #     - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.org2.example.com:7051
+  #     - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.org2.example.com:7051
+  #     - CORE_PEER_LOCALMSPID=Org2MSP
+  #   volumes:
+  #       - /var/run/:/host/var/run/
+  #       - ../crypto-config/peerOrganizations/org2.example.com/peers/peer1.org2.example.com/msp:/etc/hyperledger/fabric/msp
+  #       - ../crypto-config/peerOrganizations/org2.example.com/peers/peer1.org2.example.com/tls:/etc/hyperledger/fabric/tls
+  #       - peer1.org2.example.com:/var/hyperledger/production
+  #   ports:
+  #     - 10051:7051
+  #     - 10053:7053
+
+  peer0.carrierorg.bkpfiev.com:
+    container_name: peer0.carrierorg.bkpfiev.com
     extends:
       file: peer-base.yaml
       service: peer-base
     environment:
-      - CORE_PEER_ID=peer0.org2.example.com
-      - CORE_PEER_ADDRESS=peer0.org2.example.com:7051
-      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org2.example.com:7051
-      - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.org2.example.com:7051
-      - CORE_PEER_LOCALMSPID=Org2MSP
+      - CORE_PEER_ID=peer0.carrierorg.bkpfiev.com
+      - CORE_PEER_ADDRESS=peer0.carrierorg.bkpfiev.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.carrierorg.bkpfiev.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.carrierorg.bkpfiev.com:7051
+      - CORE_PEER_LOCALMSPID=CarrierOrgMSP
     volumes:
         - /var/run/:/host/var/run/
-        - ../crypto-config/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/msp:/etc/hyperledger/fabric/msp
-        - ../crypto-config/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls:/etc/hyperledger/fabric/tls
-        - peer0.org2.example.com:/var/hyperledger/production
+        - ../crypto-config/peerOrganizations/carrierorg.bkpfiev.com/peers/peer0.carrierorg.bkpfiev.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/carrierorg.bkpfiev.com/peers/peer0.carrierorg.bkpfiev.com/tls:/etc/hyperledger/fabric/tls
+        - peer0.carrierorg.bkpfiev.com:/var/hyperledger/production
     ports:
       - 9051:7051
       - 9053:7053
+      - 9055:6060
 
-  peer1.org2.example.com:
-    container_name: peer1.org2.example.com
+  peer0.regulatororg.bkpfiev.com:
+    container_name: peer0.regulatororg.bkpfiev.com
     extends:
       file: peer-base.yaml
       service: peer-base
     environment:
-      - CORE_PEER_ID=peer1.org2.example.com
-      - CORE_PEER_ADDRESS=peer1.org2.example.com:7051
-      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.org2.example.com:7051
-      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.org2.example.com:7051
-      - CORE_PEER_LOCALMSPID=Org2MSP
+      - CORE_PEER_ID=peer0.regulatororg.bkpfiev.com
+      - CORE_PEER_ADDRESS=peer0.regulatororg.bkpfiev.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.regulatororg.bkpfiev.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.regulatororg.bkpfiev.com:7051
+      - CORE_PEER_LOCALMSPID=RegulatorOrgMSP
     volumes:
         - /var/run/:/host/var/run/
-        - ../crypto-config/peerOrganizations/org2.example.com/peers/peer1.org2.example.com/msp:/etc/hyperledger/fabric/msp
-        - ../crypto-config/peerOrganizations/org2.example.com/peers/peer1.org2.example.com/tls:/etc/hyperledger/fabric/tls
-        - peer1.org2.example.com:/var/hyperledger/production
+        - ../crypto-config/peerOrganizations/regulatororg.bkpfiev.com/peers/peer0.regulatororg.bkpfiev.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/regulatororg.bkpfiev.com/peers/peer0.regulatororg.bkpfiev.com/tls:/etc/hyperledger/fabric/tls
+        - peer0.regulatororg.bkpfiev.com:/var/hyperledger/production
     ports:
       - 10051:7051
       - 10053:7053
+      - 10055:6060
+
+  peer0.supermarketorg.bkpfiev.com:
+    container_name: peer0.supermarketorg.bkpfiev.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer0.supermarketorg.bkpfiev.com
+      - CORE_PEER_ADDRESS=peer0.supermarketorg.bkpfiev.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.supermarketorg.bkpfiev.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.supermarketorg.bkpfiev.com:7051
+      - CORE_PEER_LOCALMSPID=SupermarketOrgMSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/supermarketorg.bkpfiev.com/peers/peer0.supermarketorg.bkpfiev.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/supermarketorg.bkpfiev.com/peers/peer0.supermarketorg.bkpfiev.com/tls:/etc/hyperledger/fabric/tls
+        - peer0.supermarketorg.bkpfiev.com:/var/hyperledger/production
+    ports:
+      - 11051:7051
+      - 11053:7053
+      - 11055:6060
+
+  peer0.farmerorg.bkpfiev.com:
+    container_name: peer0.farmerorg.bkpfiev.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer0.farmerorg.bkpfiev.com
+      - CORE_PEER_ADDRESS=peer0.farmerorg.bkpfiev.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.farmerorg.bkpfiev.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.farmerorg.bkpfiev.com:7051
+      - CORE_PEER_LOCALMSPID=FarmerOrgMSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/farmerorg.bkpfiev.com/peers/peer0.farmerorg.bkpfiev.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/farmerorg.bkpfiev.com/peers/peer0.farmerorg.bkpfiev.com/tls:/etc/hyperledger/fabric/tls
+        - peer0.farmerorg.bkpfiev.com:/var/hyperledger/production
+    ports:
+      - 12051:7051
+      - 12053:7053
+      - 12055:6060

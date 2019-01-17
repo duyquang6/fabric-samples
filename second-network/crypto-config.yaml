@@ -11,7 +11,7 @@ OrdererOrgs:
   # Orderer
   # ---------------------------------------------------------------------------
   - Name: Orderer
-    Domain: bkpfiev.com
+    Domain: example.com
     # ---------------------------------------------------------------------------
     # "Specs" - See PeerOrgs below for complete description
     # ---------------------------------------------------------------------------
@@ -24,8 +24,8 @@ PeerOrgs:
   # ---------------------------------------------------------------------------
   # Org1
   # ---------------------------------------------------------------------------
-  - Name: ExporterOrg
-    Domain: exporterorg.bkpfiev.com
+  - Name: Org1
+    Domain: org1.example.com
     EnableNodeOUs: true
     # ---------------------------------------------------------------------------
     # "Specs"
@@ -61,7 +61,7 @@ PeerOrgs:
     # name collisions
     # ---------------------------------------------------------------------------
     Template:
-      Count: 1
+      Count: 2
       # Start: 5
       # Hostname: {{.Prefix}}{{.Index}} # default
     # ---------------------------------------------------------------------------
@@ -70,59 +70,14 @@ PeerOrgs:
     # Count: The number of user accounts _in addition_ to Admin
     # ---------------------------------------------------------------------------
     Users:
-      Count: 2
+      Count: 1
   # ---------------------------------------------------------------------------
   # Org2: See "Org1" for full specification
   # ---------------------------------------------------------------------------
-  - Name: ImporterOrg
-    Domain: importerorg.bkpfiev.com
+  - Name: Org2
+    Domain: org2.example.com
     EnableNodeOUs: true
     Template:
-      Count: 1
-    Users:
       Count: 2
-  # ---------------------------------------------------------------------------
-  # CarrierOrg
-  # ---------------------------------------------------------------------------
-  - Name: CarrierOrg
-    Domain: carrierorg.bkpfiev.com
-    EnableNodeOUs: true
-    Template:
-      Count: 1
     Users:
       Count: 1
-  # ---------------------------------------------------------------------------
-  # RegulatorOrg
-  # ---------------------------------------------------------------------------
-  - Name: RegulatorOrg
-    Domain: regulatororg.bkpfiev.com
-    EnableNodeOUs: true
-    Template:
-      Count: 1
-    Users:
-      Count: 1
-  # ---------------------------------------------------------------------------
-  # SupermarketOrg
-  # ---------------------------------------------------------------------------
-  - Name: SupermarketOrg
-    Domain: supermarketorg.bkpfiev.com
-    EnableNodeOUs: true
-    Template:
-      Count: 1
-    Users:
-      Count: 1
-  # ---------------------------------------------------------------------------
-  # FarmerOrg
-  # ---------------------------------------------------------------------------
-  - Name: FarmerOrg
-    Domain: farmerorg.bkpfiev.com
-    EnableNodeOUs: true
-    Template:
-      Count: 1
-    Users:
-      Count: 1
-
-
-      
-
-
