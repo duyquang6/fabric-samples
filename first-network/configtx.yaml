@@ -332,7 +332,7 @@ Orderer: &OrdererDefaults
     OrdererType: solo
 
     Addresses:
-        - orderer.example.com:7050
+        - orderer.bkpfiev.com:7050
 
     # Batch Timeout: The amount of time to wait before creating a batch
     BatchTimeout: 2s
@@ -432,7 +432,7 @@ Profiles:
             Capabilities:
                 <<: *OrdererCapabilities
         Consortiums:
-            BkpfievConsortium:
+            SampleConsortium:
                 Organizations:
                     - *ExporterOrg
                     - *ImporterOrg
@@ -442,7 +442,7 @@ Profiles:
                     - *FarmerOrg
 
     SixOrgsChannel:
-        Consortium: BkpfievConsortium
+        Consortium: SampleConsortium
         Application:
             <<: *ApplicationDefaults
             Organizations:
@@ -475,7 +475,7 @@ Profiles:
             Organizations:
             - <<: *BkpfievOrdererOrg
         Consortiums:
-            BkpfievConsortium:
+            SampleConsortium:
                 Organizations:
                 - *ExporterOrg
                 - *ImporterOrg
